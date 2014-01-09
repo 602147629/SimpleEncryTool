@@ -32,17 +32,19 @@ package tool.encry
 		
 		public function bytesFromBytes(bytes : ByteArray) : ByteArray 
 		{
+			trace(bytes.length);
+			
 			// 将加密键字符串以 UTF-8 编码格式转化为 ByteArray 对象
 			var keyBytes : ByteArray = new ByteArray();
 			keyBytes.writeMultiByte(m_encryKey, "UTF-8");
 			
 			// 待加密数据与加密键的每一个字节进行异或计算
 			var newBytes : ByteArray = new ByteArray();
-			for (var i : int = 0; i < bytes.length;)
+			for (var i : int = 0; i < bytes.length; i += keyBytes.length)
 			{
-				for (var j : int = 0; j < keyBytes.length && i + j < bytes.length; ++j, ++i)
+				for (var j : int = 0; j < keyBytes.length && i + j < bytes.length; ++j)
 				{
-					newBytes.writeByte(bytes[i] ^ keyBytes[j]);
+					newBytes.writeByte(bytes[i + j] ^ keyBytes[j]);
 				}
 			}
 			
